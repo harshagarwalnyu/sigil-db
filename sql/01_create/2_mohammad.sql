@@ -12,7 +12,7 @@ create TABLE STUDENT (
 
 create TABLE VERIFIER(
     verifier_id         INT         NOT NULL,
-    organization_name   VARCHAR(25) NOT NULL,
+    organization_name   VARCHAR(100) NOT NULL,
     contact_email       VARCHAR(50) NOT NULL UNIQUE,
     PRIMARY KEY(verifier_id)
 );
