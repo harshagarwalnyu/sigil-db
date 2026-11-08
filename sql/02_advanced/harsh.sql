@@ -1,5 +1,5 @@
 -- Advanced commands: Harsh
--- Uses the table/column names from the Milestone 1 schema.
+-- Uses the ERD table names (UPPER_SNAKE_CASE) and Milestone 1 column names.
 --
 -- 1. TRIGGERS   grade_before_insert / grade_before_update / grade_before_delete
 --               Keep Grade append-only: no deletes, no edits, corrections are new rows.
@@ -23,14 +23,14 @@ DELIMITER $$
 --     course, that grade must not already be corrected, and a reason is required.
 -- ---------------------------------------------------------------------------
 CREATE TRIGGER grade_before_insert
-BEFORE INSERT ON Grade
+BEFORE INSERT ON GRADE
 FOR EACH ROW
 BEGIN
     DECLARE old_student INT DEFAULT NULL;
     DECLARE old_course  INT DEFAULT NULL;
 
     IF NEW.supersedes_grade_id IS NULL THEN
-        IF EXISTS (SELECT 1 FROM Grade
+        IF EXISTS (SELECT 1 FROM GRADE
                    WHERE student_id = NEW.student_id
                      AND course_id  = NEW.course_id
                      AND supersedes_grade_id IS NULL) THEN
@@ -39,7 +39,7 @@ BEGIN
         END IF;
     ELSE
         SELECT student_id, course_id INTO old_student, old_course
-        FROM Grade WHERE grade_id = NEW.supersedes_grade_id;
+        FROM GRADE WHERE grade_id = NEW.supersedes_grade_id;
 
         IF old_student IS NULL THEN
             SIGNAL SQLSTATE '45000'
@@ -49,7 +49,7 @@ BEGIN
             SIGNAL SQLSTATE '45000'
                 SET MESSAGE_TEXT = 'A correction must be for the same student and course';
         END IF;
-        IF EXISTS (SELECT 1 FROM Grade WHERE supersedes_grade_id = NEW.supersedes_grade_id) THEN
+        IF EXISTS (SELECT 1 FROM GRADE WHERE supersedes_grade_id = NEW.supersedes_grade_id) THEN
             SIGNAL SQLSTATE '45000'
                 SET MESSAGE_TEXT = 'That grade was already corrected; correct the newest version';
         END IF;
@@ -66,7 +66,7 @@ END$$
 --     while checkpoint_id is still NULL). Every other column must stay the same.
 -- ---------------------------------------------------------------------------
 CREATE TRIGGER grade_before_update
-BEFORE UPDATE ON Grade
+BEFORE UPDATE ON GRADE
 FOR EACH ROW
 BEGIN
     IF NOT (
@@ -89,7 +89,7 @@ END$$
 
 -- 1c. Grade rows can never be deleted.
 CREATE TRIGGER grade_before_delete
-BEFORE DELETE ON Grade
+BEFORE DELETE ON GRADE
 FOR EACH ROW
 BEGIN
     SIGNAL SQLSTATE '45000'
@@ -114,7 +114,7 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_student = NULL;
 
     SELECT student_id, status, expires_at INTO v_student, v_status, v_expires
-    FROM DisclosureProof WHERE proof_id = p_proof_id;
+    FROM DISCLOSURE_PROOF WHERE proof_id = p_proof_id;
 
     IF v_student IS NULL OR v_status <> 'active' THEN
         RETURN FALSE;
@@ -123,18 +123,18 @@ BEGIN
         RETURN FALSE;
     END IF;
 
-    SELECT COUNT(*) INTO v_shown FROM DisclosedGrade WHERE proof_id = p_proof_id;
+    SELECT COUNT(*) INTO v_shown FROM DISCLOSED_GRADE WHERE proof_id = p_proof_id;
     IF v_shown = 0 THEN
         RETURN FALSE;
     END IF;
 
     SELECT COUNT(*) INTO v_bad
-    FROM DisclosedGrade dg
-    JOIN Grade g ON g.grade_id = dg.grade_id
+    FROM DISCLOSED_GRADE dg
+    JOIN GRADE g ON g.grade_id = dg.grade_id
     WHERE dg.proof_id = p_proof_id
       AND (   g.student_id <> v_student
            OR g.checkpoint_id IS NULL
-           OR EXISTS (SELECT 1 FROM Grade newer
+           OR EXISTS (SELECT 1 FROM GRADE newer
                       WHERE newer.supersedes_grade_id = g.grade_id));
 
     RETURN v_bad = 0;
@@ -169,7 +169,7 @@ BEGIN
     START TRANSACTION;
 
     SELECT COUNT(*) INTO v_count
-    FROM Grade g JOIN Course c ON c.course_id = g.course_id
+    FROM GRADE g JOIN COURSE c ON c.course_id = g.course_id
     WHERE g.checkpoint_id IS NULL
       AND c.university_id = p_university_id
       AND c.term = p_term;
@@ -180,10 +180,10 @@ BEGIN
     END IF;
 
     SELECT COALESCE(MAX(version_no), 0) + 1 INTO v_version
-    FROM MerkleCheckpoint
+    FROM MERKLE_CHECKPOINT
     WHERE university_id = p_university_id AND term = p_term;
 
-    INSERT INTO MerkleCheckpoint
+    INSERT INTO MERKLE_CHECKPOINT
         (university_id, term, version_no, root_hash, leaf_count, signature, published_at)
     VALUES
         (p_university_id, p_term, v_version, p_root_hash, v_count, p_signature, NOW());
@@ -192,7 +192,7 @@ BEGIN
     seal_loop: LOOP
         SET v_grade = NULL;
         SELECT MIN(g.grade_id) INTO v_grade
-        FROM Grade g JOIN Course c ON c.course_id = g.course_id
+        FROM GRADE g JOIN COURSE c ON c.course_id = g.course_id
         WHERE g.checkpoint_id IS NULL
           AND c.university_id = p_university_id
           AND c.term = p_term;
@@ -201,7 +201,7 @@ BEGIN
             LEAVE seal_loop;
         END IF;
 
-        UPDATE Grade
+        UPDATE GRADE
         SET checkpoint_id = v_checkpoint, leaf_index = v_leaf
         WHERE grade_id = v_grade;
 
