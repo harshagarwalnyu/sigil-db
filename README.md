@@ -27,4 +27,11 @@ mysql -u <user> -p < build.sql   # drops and rebuilds `sigil` from every file in
 Edit only your own files, then `git add sql/ && git commit -m "msg" && git push`.
 In DataGrip: open a terminal in the repo and run the mysql command above (DataGrip's editor doesn't support `SOURCE`).
 
-All SQL must be written by us (no AI-generated SQL, per the brief).
+## Names Harsh's advanced commands rely on (keep these in your CREATE TABLEs)
+- Tables: `Grade`, `Course`, `MerkleCheckpoint`, `DisclosureProof`, `DisclosedGrade` (exact Milestone 1 names)
+- `Grade`: grade_id, student_id, course_id, checkpoint_id (**nullable**, NULL until published), supersedes_grade_id (nullable), letter_grade, salt, leaf_hash, leaf_index (nullable), change_reason, recorded_at
+- `MerkleCheckpoint.checkpoint_id` must be `AUTO_INCREMENT`
+- `DisclosureProof.status` uses `'active'` / `'revoked'`
+- No `ON DELETE CASCADE` on foreign keys pointing into Grade (cascades skip triggers)
+- Test them: `mysql -u <user> -p --force sigil < sql/tests/harsh_tests.sql`, then rerun build.sql
+
