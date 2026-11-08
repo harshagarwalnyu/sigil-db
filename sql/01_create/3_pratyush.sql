@@ -1,7 +1,7 @@
 -- CREATE TABLE statements: pratyush
 
 -- 2. Grade Table
-CREATE TABLE Grade (
+CREATE TABLE GRADE (
     grade_id INT NOT NULL AUTO_INCREMENT,
     student_id INT NOT NULL,
     course_id INT NOT NULL,
@@ -16,19 +16,19 @@ CREATE TABLE Grade (
     PRIMARY KEY (grade_id),
     UNIQUE (supersedes_grade_id),
     UNIQUE (leaf_hash),
-    FOREIGN KEY (student_id) REFERENCES Student(student_id),
-    FOREIGN KEY (course_id) REFERENCES Course(course_id),
-    FOREIGN KEY (checkpoint_id) REFERENCES Merkle_Checkpoint(checkpoint_id),
-    FOREIGN KEY (supersedes_grade_id) REFERENCES Grade(grade_id),
+    FOREIGN KEY (student_id) REFERENCES STUDENT(student_id),
+    FOREIGN KEY (course_id) REFERENCES COURSE(course_id),
+    FOREIGN KEY (checkpoint_id) REFERENCES MERKLE_CHECKPOINT(checkpoint_id),
+    FOREIGN KEY (supersedes_grade_id) REFERENCES GRADE(grade_id),
     CHECK (letter_grade IN ('A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'F')),
     CHECK (supersedes_grade_id IS NULL OR change_reason IS NOT NULL)
 );
 
 -- 3. Disclosed_Grade Table
-CREATE TABLE Disclosed_Grade (
+CREATE TABLE DISCLOSED_GRADE (
     proof_id INT NOT NULL,
     grade_id INT NOT NULL,
     PRIMARY KEY (proof_id, grade_id),
-    FOREIGN KEY (proof_id) REFERENCES Disclosure_Proof(proof_id),
-    FOREIGN KEY (grade_id) REFERENCES Grade(grade_id)
+    FOREIGN KEY (proof_id) REFERENCES DISCLOSURE_PROOF(proof_id),
+    FOREIGN KEY (grade_id) REFERENCES GRADE(grade_id)
 );
