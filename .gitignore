@@ -1,0 +1,13 @@
+~$*
+*.tmp
+.idea/
+.DS_Store
+__pycache__/
+
+# local only
+Milestone 2_UI design.docx-31.pdf
+Milestone 3_DB setup and SQL.docx-4.pdf
+Milestone2_UI_Design.docx
+screens/
+ui_src/
+*.docx

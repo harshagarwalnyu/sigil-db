@@ -1,0 +1,1 @@
+-- App queries (SELECT / INSERT / UPDATE / DELETE): harsh

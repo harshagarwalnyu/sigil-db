@@ -1,0 +1,2 @@
+-- INSERT seed data (10+ rows per table): mohammad
+-- Do NOT run until every table is created.

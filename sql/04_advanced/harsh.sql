@@ -1,0 +1,1 @@
+-- Advanced commands (trigger, function, procedure, CHECK): harsh
