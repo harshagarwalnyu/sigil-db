@@ -108,7 +108,7 @@ def main():
               '-- WARNING: importing recreates the disposable sigil database.', exported]
     for path in sorted((ROOT / 'sql/04_queries').glob('*.sql')):
         bundle += [f'\n-- Application queries: {path.name}\n',path.read_text(encoding='utf-8')]
-    (ROOT / 'COMMANDS.sql').write_text('\n'.join(bundle),encoding='utf-8')
+    (ROOT / 'COMMANDS.sql').write_text('\n'.join(line.rstrip() for line in '\n'.join(bundle).splitlines())+'\n',encoding='utf-8')
     print(f'Exported COMMANDS.sql, {len(tables)} schema/data captures, final-schema.md and final-erd.mmd')
 
 

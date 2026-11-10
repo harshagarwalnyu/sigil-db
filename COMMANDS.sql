@@ -140,7 +140,7 @@ DROP TABLE IF EXISTS `COURSE_CONTEXT`;
 /*!50001 DROP VIEW IF EXISTS `COURSE_CONTEXT`*/;
 SET @saved_cs_client     = @@character_set_client;
 /*!50503 SET character_set_client = utf8mb4 */;
-/*!50001 CREATE VIEW `COURSE_CONTEXT` AS SELECT 
+/*!50001 CREATE VIEW `COURSE_CONTEXT` AS SELECT
  1 AS `course_id`,
  1 AS `instructor_id`,
  1 AS `course_code`,
