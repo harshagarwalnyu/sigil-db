@@ -11,9 +11,9 @@ VALUES (9001, 9001, 'Test', 'Student', 'test.student@example.edu', '2004-01-01')
        (9002, 9001, 'Other', 'Student', 'other.student@example.edu', '2004-02-02');
 INSERT INTO INSTRUCTOR (instructor_id, university_id, first_name, last_name, email, department)
 VALUES (9001, 9001, 'Test', 'Prof', 'test.prof@example.edu', 'CS');
-INSERT INTO COURSE (course_id, university_id, instructor_id, course_code, title, credit_hours, term)
-VALUES (9001, 9001, 9001, 'TST-101', 'Test Course', 4, 'TEST-2026'),
-       (9002, 9001, 9001, 'TST-102', 'Test Course 2', 4, 'TEST-2026');
+INSERT INTO COURSE (course_id, instructor_id, course_code, title, credit_hours, term)
+VALUES (9001, 9001, 'TST-101', 'Test Course', 4, 'TEST-2026'),
+       (9002, 9001, 'TST-102', 'Test Course 2', 4, 'TEST-2026');
 INSERT INTO VERIFIER (verifier_id, organization_name, contact_email) VALUES (9001, 'Test Employer', 'hr@example.com');
 
 INSERT INTO GRADE (grade_id, student_id, course_id, letter_grade, salt, leaf_hash)

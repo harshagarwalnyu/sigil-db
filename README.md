@@ -14,6 +14,8 @@ Due **Mon Nov 9, 11:59pm**. Submit `REPORT.pdf` + `COMMANDS.sql` on Gradescope.
 
 ## Layout (files run in this order)
 - `sql/01_create/<n>_<name>.sql` – CREATE TABLE (Khalid → Mohammad → Pratyush)
+- `sql/01_create/4_ui_support.sql` – enrollment, grade drafts, correction requests
+- `sql/01_create/5_views.sql` – derived course university context
 - `sql/02_advanced/harsh.sql` – triggers / functions / procedures
 - `sql/03_seed/<n>_<name>.sql` – INSERT data
 - `sql/04_queries/<name>.sql` – queries the app uses (not run by build)
@@ -28,7 +30,7 @@ Edit only your own files, then `git add sql/ && git commit -m "msg" && git push`
 In DataGrip: open a terminal in the repo and run the mysql command above (DataGrip's editor doesn't support `SOURCE`).
 
 ## Table names (team decision: ERD style, UPPER_SNAKE_CASE)
-`UNIVERSITY`, `STUDENT`, `STUDENT_PHONE`, `INSTRUCTOR`, `COURSE`, `MERKLE_CHECKPOINT`, `GRADE`, `VERIFIER`, `DISCLOSURE_PROOF`, `DISCLOSED_GRADE`
+`UNIVERSITY`, `STUDENT`, `STUDENT_PHONE`, `INSTRUCTOR`, `COURSE`, `MERKLE_CHECKPOINT`, `GRADE`, `VERIFIER`, `DISCLOSURE_PROOF`, `DISCLOSED_GRADE`, `ENROLLMENT`, `GRADE_DRAFT`, `CORRECTION_REQUEST`
 Use these exact names in CREATE TABLE and in every FOREIGN KEY ... REFERENCES.
 
 ## Columns Harsh's advanced commands rely on
@@ -46,7 +48,13 @@ is historical; this milestone uses MySQL syntax and tooling.
 Harsh's application queries are in `sql/04_queries/harsh.sql`: proof lookup,
 disclosed grade evidence, the public checkpoint registry, backend tree leaves,
 and mobile proof creation/selection/revocation. The write examples roll back.
-The other three query files remain assigned to their respective owners.
+The student, instructor and registrar query files cover screens 2-12. Shared
+workflow procedures implement original-grade submission, atomic whole-roster
+submission, correction approval/rejection, and irreversible proof revocation.
+
+Milestone 1 feedback is addressed: `COURSE.university_id` has been removed.
+University membership is derived through the required instructor;
+`COURSE_CONTEXT` exposes it for query convenience without storing it twice.
 
 On Windows, run `./scripts/install-windows.ps1` from your own PowerShell to install
 MySQL and DataGrip with WinGet. Then use **MySQL Configurator** to initialize the
@@ -74,4 +82,27 @@ constraints or stored routines.
 
 See [implementation notes](docs/implementation-notes.md) for the publication
 exception to append-only grades, fixture cryptography, and verification limits.
+
+## Milestone 3 submission files
+
+- `COMMANDS.sql`: a real MySQL export containing all tables, data, views,
+  routines and triggers, followed by the four tested application-query files.
+  It can be imported by itself; no `SOURCE` dependencies are required.
+- `docs/final-erd.pdf` and `docs/final-erd.mmd`: final ERD for the report.
+- `docs/final-schema.md`: final schema statements matching the implementation.
+- `report-evidence/`: actual MySQL schema/data/count outputs and test results.
+- `docs/milestone3-review.md`: rubric assessment and remaining submission tasks.
+
+`REPORT.pdf` is prepared separately. The report must contain actual screenshots
+and team names/NetIDs; the individual peer evaluation is submitted separately.
+
+To refresh the SQL export and report evidence after a clean build:
+
+```powershell
+python scripts/build_submission.py --mysql "C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe" --ask-password
+python scripts/render_erd.py
+```
+
+The diagram renderer needs `reportlab`; the other scripts use Python's standard
+library. Use `--port 33307` when connecting to the isolated validation server.
 

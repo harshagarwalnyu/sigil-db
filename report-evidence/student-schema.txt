@@ -1,0 +1,13 @@
+DESCRIBE STUDENT;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| student_id     | int         | NO   | PRI | NULL    |       |
+| university_id  | int         | NO   | MUL | NULL    |       |
+| first_name     | varchar(25) | NO   |     | NULL    |       |
+| last_name      | varchar(25) | NO   |     | NULL    |       |
+| email          | varchar(50) | NO   | UNI | NULL    |       |
+| date_of_birth  | date        | NO   |     | NULL    |       |
+| netid          | varchar(25) | YES  | UNI | NULL    |       |
+| student_number | char(9)     | YES  | UNI | NULL    |       |
++----------------+-------------+------+-----+---------+-------+

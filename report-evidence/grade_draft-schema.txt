@@ -1,0 +1,9 @@
+DESCRIBE GRADE_DRAFT;
++--------------+------------+------+-----+---------+-------+
+| Field        | Type       | Null | Key | Default | Extra |
++--------------+------------+------+-----+---------+-------+
+| student_id   | int        | NO   | PRI | NULL    |       |
+| course_id    | int        | NO   | PRI | NULL    |       |
+| letter_grade | varchar(2) | NO   |     | NULL    |       |
+| saved_at     | datetime   | NO   |     | NULL    |       |
++--------------+------------+------+-----+---------+-------+

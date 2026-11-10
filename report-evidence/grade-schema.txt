@@ -1,0 +1,16 @@
+DESCRIBE GRADE;
++---------------------+--------------+------+-----+-------------------+-------------------+
+| Field               | Type         | Null | Key | Default           | Extra             |
++---------------------+--------------+------+-----+-------------------+-------------------+
+| grade_id            | int          | NO   | PRI | NULL              | auto_increment    |
+| student_id          | int          | NO   | MUL | NULL              |                   |
+| course_id           | int          | NO   | MUL | NULL              |                   |
+| checkpoint_id       | int          | YES  | MUL | NULL              |                   |
+| supersedes_grade_id | int          | YES  | UNI | NULL              |                   |
+| letter_grade        | varchar(2)   | NO   |     | NULL              |                   |
+| salt                | char(64)     | NO   |     | NULL              |                   |
+| leaf_hash           | char(64)     | NO   | UNI | NULL              |                   |
+| leaf_index          | int          | YES  |     | NULL              |                   |
+| change_reason       | varchar(500) | YES  |     | NULL              |                   |
+| recorded_at         | datetime     | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++---------------------+--------------+------+-----+-------------------+-------------------+

@@ -1,0 +1,102 @@
+Checking build.sql
+Checking sql/tests/integrity_tests.sql
+checkpoint_id	version_no	leaf_count
+800004	2	1
+result
+PASS: integrity regression tests
+Checking sql/tests/workflow_tests.sql
+result
+PASS: normalized course, instructor submission, approval, rejection and revocation workflows
+Checking sql/04_queries/khalid.sql
+course_id	course_code	title	credit_hours	term	grade_id	letter_grade	grade_status	corrected	version_no
+1	CS101	Intro to Programming	3	Fall 2025	11	A	Sealed	1	1
+11	CS101-II	Intro to Programming II	3	Fall 2026	700001	A	Awaiting publication	0	NULL
+21	CS205	Data Structures	4	Spring 2026	13	A-	Sealed	0	1
+22	CS230	Discrete Mathematics	3	Spring 2026	14	B+	Sealed	0	1
+800101	BATCH101	Batch Test	3	TEST-2026	700101	A	Awaiting publication	0	NULL
+gpa	earned_credits	sealed_grades	active_links
+3.79	16	3	2
+in_progress_credits
+0
+grade_id	letter_grade	recorded_at	supersedes_grade_id	change_reason	checkpoint_id	leaf_index	leaf_hash	root_hash	signature	instructor_first_name	instructor_last_name	is_current
+11	A	2025-12-28 14:00:00	1	Final exam question 4 regraded after review; approved by registrar.	1	1	f3f9d4365e83b42106bc66d0c2abd412015f8eb4f60cb1431d3d3f936eb86e87	fa5e9bdbef8a1e9d10733fc464934d8f8070169c4d1b739d561c1f44a2db44b1	DEMO-ONLY-signature-1	John	Smith	1
+1	B+	2025-12-15 10:00:00	NULL	NULL	1	0	923df89e1cad53c1f182208ce7a7fe98935e875ecca495eccd12e93654dac895	fa5e9bdbef8a1e9d10733fc464934d8f8070169c4d1b739d561c1f44a2db44b1	DEMO-ONLY-signature-1	John	Smith	0
+grade_id	course_code	title	term	letter_grade	selectable
+11	CS101	Intro to Programming	Fall 2025	A	1
+700001	CS101-II	Intro to Programming II	Fall 2026	A	0
+13	CS205	Data Structures	Spring 2026	A-	1
+14	CS230	Discrete Mathematics	Spring 2026	B+	1
+700101	BATCH101	Batch Test	TEST-2026	A	0
+verifier_id	organization_name	contact_email
+3	Amazon	talent@amazon.com
+7	Apple	jobs@apple.com
+5	Deloitte	verify@deloitte.com
+4	Goldman Sachs	careers@gs.com
+1	Google	hiring@google.com
+9	IBM	hr@ibm.com
+8	JPMorgan Chase	campus@jpmorgan.com
+6	Meta	recruiting@meta.com
+2	Microsoft	recruiting@microsoft.com
+10	NYU Graduate School	admissions@nyu.edu
+phone_number
+617-555-0101
+617-555-0102
+ready_to_share
+1
+proof_id	organization_name	created_at	expires_at	link_status	selected_grades	share_token
+11	Meta	2026-10-25 09:00:00	2027-01-25 09:00:00	Active	1	77c0e610d04036e9946b1b5e6f099f1c43fbd0e2f7e9be3725f295cb47ab994d
+1	Google	2026-09-01 10:00:00	2026-12-01 10:00:00	Active	2	65d01b54c870182ca3365564dbc7677a196f72a52f1ec15fdbf2da5efd013345
+status	revoked_at
+revoked	2026-11-09 20:38:32
+Checking sql/04_queries/pratyush.sql
+course_id	course_code	title	section	credit_hours	term	submission_deadline	enrollment	submitted	saved_drafts	pending_corrections
+11	CS101-II	Intro to Programming II	001	3	Fall 2026	2026-12-20 23:59:59	1	1	0	0
+student_id	netid	student_number	first_name	last_name	draft_grade	submitted_grade	entry_state
+1	oh0001	N00000001	Omar	Haddad	NULL	A	Submitted
+grade_id	student_id	first_name	last_name	course_code	term	letter_grade	checkpoint_id	leaf_index
+11	1	Omar	Haddad	CS101	Fall 2025	A	1	1
+13	1	Omar	Haddad	CS205	Spring 2026	A-	11	0
+14	1	Omar	Haddad	CS230	Spring 2026	B+	11	1
+request_id	grade_id	instructor_id	proposed_letter_grade	change_reason	evidence_uri	status	requested_at	reviewed_at	reviewer_comment	approved_grade_id	original_letter	course_code
+1	1	1	A	Final exam question 4 regraded.	NULL	approved	2025-12-27 10:00:00	2025-12-28 14:00:00	Approved after review	11	B+	CS101
+Checking sql/04_queries/mohammad.sql
+pending_requests	unpublished_grades	last_publication	active_links
+0	1	2026-01-01 00:00:00	1
+course_id	course_code	title	term	submission_deadline	email	enrolled	submitted
+2	MATH201	Calculus II	Fall 2025	2025-12-20 23:59:59	sarah.johnson@stanford.edu	1	1
+next_version
+2
+next_leaf_index	grade_id	student_id	course_code	letter_grade	leaf_hash
+0	700002	2	MATH201	A-	d4763aa20dd8ad5e1579153d2c15a0f7970980e0267d6d01f4c1f85ec4d7ebbf
+grade_id	recorded_at	netid	first_name	last_name	course_code	term	letter_grade	supersedes_grade_id	change_reason	checkpoint_id	leaf_hash	entry_type	root_hash	signature
+700002	2026-11-09 20:38:32	ar0002	Aisha	Rahman	MATH201	Fall 2025	A-	2	Recheck final exam arithmetic.	NULL	d4763aa20dd8ad5e1579153d2c15a0f7970980e0267d6d01f4c1f85ec4d7ebbf	Correction	NULL	NULL
+2	2025-12-15 10:30:00	ar0002	Aisha	Rahman	MATH201	Fall 2025	A	NULL	NULL	2	ee85e7e2deeec05c1b189683254a5814bb3a9def6912c84f0c0545dec04efc06	Superseded	ee85e7e2deeec05c1b189683254a5814bb3a9def6912c84f0c0545dec04efc06	DEMO-ONLY-signature-2
+event_type	event_at	reference_id
+Grade submitted	2026-11-09 20:38:32	700002
+Correction approved	2026-11-09 20:38:32	3
+Correction requested	2026-11-01 10:00:00	3
+Proof created	2026-09-05 14:30:00	2
+Checkpoint published	2026-01-01 00:00:00	2
+Grade submitted	2025-12-15 10:30:00	2
+Checking sql/04_queries/harsh.sql
+proof_id	organization_name	created_at	expires_at	verification_status
+1	Google	2026-09-01 10:00:00	2026-12-01 10:00:00	Ready for cryptographic verification
+proof_id	first_name	last_name	grade_id	student_id	course_id	course_code	title	credit_hours	term	letter_grade	salt	leaf_hash	leaf_index	checkpoint_id	version_no	root_hash	signature	published_at	university_name	public_key
+1	Omar	Haddad	11	1	1	CS101	Intro to Programming	3	Fall 2025	A	salt11	f3f9d4365e83b42106bc66d0c2abd412015f8eb4f60cb1431d3d3f936eb86e87	1	1	1	fa5e9bdbef8a1e9d10733fc464934d8f8070169c4d1b739d561c1f44a2db44b1	DEMO-ONLY-signature-1	2026-01-01 00:00:00	Massachusetts Institute of Technology	key1
+1	Omar	Haddad	13	1	21	CS205	Data Structures	4	Spring 2026	A-	salt13	e1278f6852ae0be12fac5f8fe4304595d606ae756d3d529dabc85112d460404b	0	11	1	5730a61f7c8b37308ae89b8d4bad94468382a8ec4dc2195c8ae8a88be6ca7b06	DEMO-ONLY-signature-11	2026-06-01 10:00:00	Massachusetts Institute of Technology	key1
+university_name	public_key	checkpoint_id	term	version_no	root_hash	leaf_count	signature	published_at
+Massachusetts Institute of Technology	key1	1	Fall 2025	1	fa5e9bdbef8a1e9d10733fc464934d8f8070169c4d1b739d561c1f44a2db44b1	2	DEMO-ONLY-signature-1	2026-01-01 00:00:00
+leaf_index	leaf_hash
+0	923df89e1cad53c1f182208ce7a7fe98935e875ecca495eccd12e93654dac895
+1	f3f9d4365e83b42106bc66d0c2abd412015f8eb4f60cb1431d3d3f936eb86e87
+proof_id	organization_name	status	created_at	expires_at	disclosed_grade_count	database_valid
+11	Meta	active	2026-10-25 09:00:00	2027-01-25 09:00:00	1	1
+1	Google	active	2026-09-01 10:00:00	2026-12-01 10:00:00	2	1
+new_proof_valid
+1
+empty_proof_invalid
+0
+revoked_proof_invalid
+0
+Checking build.sql
+PASS: MySQL validation completed

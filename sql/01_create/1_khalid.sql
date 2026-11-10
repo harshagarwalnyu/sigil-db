@@ -12,7 +12,6 @@ CREATE TABLE INSTRUCTOR (
     last_name VARCHAR(100),
     email VARCHAR(255) UNIQUE,
     department VARCHAR(255),
-    UNIQUE (university_id, instructor_id),
     FOREIGN KEY (university_id) REFERENCES UNIVERSITY(university_id)
 );
 
@@ -31,14 +30,13 @@ CREATE TABLE MERKLE_CHECKPOINT (
 
 CREATE TABLE COURSE (
     course_id INT AUTO_INCREMENT PRIMARY KEY,
-    university_id INT NOT NULL,
     instructor_id INT NOT NULL,
     course_code VARCHAR(50) NOT NULL,
     title VARCHAR(255) NOT NULL,
     credit_hours INT NOT NULL CHECK (credit_hours > 0),
     term VARCHAR(50) NOT NULL,
-    UNIQUE (university_id, course_code, term),
-    FOREIGN KEY (university_id) REFERENCES UNIVERSITY(university_id),
-    FOREIGN KEY (university_id, instructor_id)
-        REFERENCES INSTRUCTOR(university_id, instructor_id)
+    section VARCHAR(10) NOT NULL DEFAULT '001',
+    submission_deadline DATETIME,
+    UNIQUE (instructor_id, course_code, term, section),
+    FOREIGN KEY (instructor_id) REFERENCES INSTRUCTOR(instructor_id)
 );

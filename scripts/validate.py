@@ -27,6 +27,8 @@ def main() -> None:
     parser.add_argument("--mysql", default="mysql", help="Path to mysql.exe")
     parser.add_argument("--container", help="Use docker exec instead of a local client")
     parser.add_argument("--user", default="root")
+    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=3306)
     parser.add_argument("--ask-password", action="store_true", help="Prompt without echoing or storing the password")
     parser.add_argument("--rebuild", action="store_true", help="DROP and rebuild the disposable sigil database")
     args = parser.parse_args()
@@ -37,8 +39,12 @@ def main() -> None:
         if args.container else [args.mysql]
     )
     command += ["--batch", "--raw", "--user=" + args.user]
+    if not args.container:
+        command += ["--host=" + args.host, "--port=" + str(args.port)]
     paths = (["build.sql"] if args.rebuild else []) + [
-        "sql/tests/integrity_tests.sql", "sql/04_queries/harsh.sql"
+        "sql/tests/integrity_tests.sql", "sql/tests/workflow_tests.sql",
+        "sql/04_queries/khalid.sql", "sql/04_queries/pratyush.sql",
+        "sql/04_queries/mohammad.sql", "sql/04_queries/harsh.sql"
     ]
     if args.rebuild:
         paths.append("build.sql")  # Restore seeds after the publication regression.

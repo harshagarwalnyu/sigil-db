@@ -1,0 +1,13 @@
+DESCRIBE DISCLOSURE_PROOF;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| proof_id    | int         | NO   | PRI | NULL    |       |
+| student_id  | int         | NO   | MUL | NULL    |       |
+| verifier_id | int         | NO   | MUL | NULL    |       |
+| status      | varchar(10) | NO   |     | NULL    |       |
+| created_at  | datetime    | NO   |     | NULL    |       |
+| expires_at  | datetime    | NO   |     | NULL    |       |
+| share_token | char(64)    | YES  | UNI | NULL    |       |
+| revoked_at  | datetime    | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+

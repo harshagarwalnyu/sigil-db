@@ -3,10 +3,14 @@
 MySQL 8.4 is the implementation target. The submitted Milestone PDFs are
 historical design artifacts; this file records the implementation differences.
 
-Courses require an instructor from the same university. University addresses
+Courses require an instructor and derive their university through that instructor.
+COURSE does not store university_id, addressing the Milestone 1 redundancy
+feedback. COURSE_CONTEXT is a view joining COURSE to INSTRUCTOR. University addresses
 from the earlier overview are outside the implemented schema; UNIVERSITY stores
 the ID, name, and public key. STUDENT_PHONE and DISCLOSED_GRADE are the two
-additional relations supporting the eight core entities.
+additional relations supporting the eight core entities. ENROLLMENT, GRADE_DRAFT
+and CORRECTION_REQUEST support the roster, autosave and approval screens, making
+13 stored relations in the final model. Each is populated with at least 10 rows.
 
 Grade content is append-only: corrections insert a new row, and deletion is
 blocked. There is exactly one permitted metadata update: an unpublished grade
@@ -21,7 +25,9 @@ raw 32-byte child hashes, not their hexadecimal text. A one-leaf tree's root is
 that leaf hash. Larger trees duplicate an unpaired final child at each level.
 Leaves are ordered by leaf_index, starting at zero. Checkpoint 1 has two leaves
 (original grade 1 and correction 11); the correction was recorded before that
-checkpoint's publication. The other seed checkpoints each have one leaf.
+checkpoint's publication. Checkpoint 11 has two Spring 2026 grades; the other
+seed checkpoints each have one leaf. Proof 1 reveals two current grades while
+withholding another, demonstrating a genuine subset of a multi-course transcript.
 
 The fixed salts, `keyN` public keys, and `DEMO-ONLY-signature-N` values are test
 fixtures, not cryptographically secure credentials. The roots commit to the
@@ -41,6 +47,19 @@ leaves, and exposes only the requested proof paths to a verifier.
 
 An offline proof establishes inclusion in a signed historical checkpoint.
 Current-grade and revocation checks require fresh trusted state; an offline
-file alone cannot establish them. Public proof IDs also require an application
-access-control design before deployment; the SQL examples demonstrate queries,
-not a complete authentication or sharing-token implementation.
+file alone cannot establish them. Public lookup uses an opaque 64-character
+sharing token. Seed tokens are predictable fixtures; newly created examples use
+RANDOM_BYTES(32). Student/instructor/registrar IDs must come from authenticated
+server sessions, not untrusted form input. Authentication, signing, file uploads,
+QR encoding, CSV parsing and email delivery belong to the application layer;
+this milestone supplies the supporting queries, not an implemented web app.
+
+Draft grades are separate from final grades, so autosave never edits the ledger.
+submit_course_grades validates a complete enrolled roster and commits it
+atomically. review_correction records a pending request's decision and appends a
+new grade only on approval. Example grade IDs are supplied explicitly; a real
+application must allocate unique IDs and retry collisions. Database accounts
+must be restricted before deployment: examples and tests run as an administrator,
+and triggers are not a replacement for application authorization or least-privilege
+GRANTs. Course/instructor university reassignment and concurrent checkpoint
+publication also require controlled administrative/application workflows.

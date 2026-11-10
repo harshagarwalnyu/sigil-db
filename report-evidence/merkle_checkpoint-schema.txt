@@ -1,0 +1,13 @@
+DESCRIBE MERKLE_CHECKPOINT;
++---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
++---------------+-------------+------+-----+---------+----------------+
+| checkpoint_id | int         | NO   | PRI | NULL    | auto_increment |
+| university_id | int         | NO   | MUL | NULL    |                |
+| term          | varchar(50) | NO   |     | NULL    |                |
+| version_no    | int         | NO   |     | NULL    |                |
+| root_hash     | char(64)    | NO   |     | NULL    |                |
+| leaf_count    | int         | NO   |     | NULL    |                |
+| signature     | text        | NO   |     | NULL    |                |
+| published_at  | datetime    | NO   |     | NULL    |                |
++---------------+-------------+------+-----+---------+----------------+

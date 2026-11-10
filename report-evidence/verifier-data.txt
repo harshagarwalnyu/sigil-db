@@ -1,0 +1,15 @@
+SELECT * FROM VERIFIER;
++-------------+---------------------+--------------------------+
+| verifier_id | organization_name   | contact_email            |
++-------------+---------------------+--------------------------+
+|           1 | Google              | hiring@google.com        |
+|           2 | Microsoft           | recruiting@microsoft.com |
+|           3 | Amazon              | talent@amazon.com        |
+|           4 | Goldman Sachs       | careers@gs.com           |
+|           5 | Deloitte            | verify@deloitte.com      |
+|           6 | Meta                | recruiting@meta.com      |
+|           7 | Apple               | jobs@apple.com           |
+|           8 | JPMorgan Chase      | campus@jpmorgan.com      |
+|           9 | IBM                 | hr@ibm.com               |
+|          10 | NYU Graduate School | admissions@nyu.edu       |
++-------------+---------------------+--------------------------+

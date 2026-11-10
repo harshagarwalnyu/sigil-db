@@ -6,6 +6,8 @@ create TABLE STUDENT (
     last_name       VARCHAR(25) NOT NULL,
     email           VARCHAR(50) NOT NULL UNIQUE,
     date_of_birth   DATE        NOT NULL,
+    netid           VARCHAR(25) UNIQUE,
+    student_number  CHAR(9) UNIQUE,
     PRIMARY KEY(student_id),
     FOREIGN KEY(university_id) REFERENCES UNIVERSITY(university_id)
 );
@@ -24,6 +26,8 @@ create TABLE DISCLOSURE_PROOF (
     status       VARCHAR(10)  NOT NULL CHECK (status IN ('active', 'revoked')),
     created_at      DATETIME    NOT NULL,
     expires_at      DATETIME    NOT NULL,
+    share_token     CHAR(64) UNIQUE,
+    revoked_at      DATETIME,
     CHECK (expires_at > created_at),
     PRIMARY KEY(proof_id),
     FOREIGN KEY(student_id) REFERENCES STUDENT(student_id),

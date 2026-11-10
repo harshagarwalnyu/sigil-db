@@ -28,6 +28,10 @@ CREATE TABLE GRADE (
            (checkpoint_id IS NOT NULL AND leaf_index IS NOT NULL AND leaf_index >= 0))
 );
 
+-- Enforce original-grade uniqueness even for concurrent inserts.
+CREATE UNIQUE INDEX uq_original_student_course
+ON GRADE (student_id, (CASE WHEN supersedes_grade_id IS NULL THEN course_id ELSE NULL END));
+
 -- 3. Disclosed_Grade Table
 CREATE TABLE DISCLOSED_GRADE (
     proof_id INT NOT NULL,

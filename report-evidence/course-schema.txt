@@ -1,0 +1,13 @@
+DESCRIBE COURSE;
++---------------------+--------------+------+-----+---------+----------------+
+| Field               | Type         | Null | Key | Default | Extra          |
++---------------------+--------------+------+-----+---------+----------------+
+| course_id           | int          | NO   | PRI | NULL    | auto_increment |
+| instructor_id       | int          | NO   | MUL | NULL    |                |
+| course_code         | varchar(50)  | NO   |     | NULL    |                |
+| title               | varchar(255) | NO   |     | NULL    |                |
+| credit_hours        | int          | NO   |     | NULL    |                |
+| term                | varchar(50)  | NO   |     | NULL    |                |
+| section             | varchar(10)  | NO   |     | 001     |                |
+| submission_deadline | datetime     | YES  |     | NULL    |                |
++---------------------+--------------+------+-----+---------+----------------+

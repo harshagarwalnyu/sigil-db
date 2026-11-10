@@ -1,0 +1,8 @@
+DESCRIBE UNIVERSITY;
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| university_id | int          | NO   | PRI | NULL    | auto_increment |
+| name          | varchar(255) | NO   | UNI | NULL    |                |
+| public_key    | varchar(255) | NO   |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+

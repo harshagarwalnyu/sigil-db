@@ -1,0 +1,8 @@
+DESCRIBE VERIFIER;
++-------------------+--------------+------+-----+---------+-------+
+| Field             | Type         | Null | Key | Default | Extra |
++-------------------+--------------+------+-----+---------+-------+
+| verifier_id       | int          | NO   | PRI | NULL    |       |
+| organization_name | varchar(100) | NO   |     | NULL    |       |
+| contact_email     | varchar(50)  | NO   | UNI | NULL    |       |
++-------------------+--------------+------+-----+---------+-------+

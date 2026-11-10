@@ -11,3 +11,7 @@ Milestone2_UI_Design.docx
 screens/
 ui_src/
 *.docx
+
+# Isolated local MySQL data, connection secrets and Python bytecode
+.local/
+*.pyc

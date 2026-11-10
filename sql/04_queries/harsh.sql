@@ -3,9 +3,12 @@
 -- The reads do not modify data. The sharing example ends with ROLLBACK.
 -- Applications must bind parameters and authorize student writes server-side.
 USE sigil;
-SET @proof_id = 1;
+SET @proof_token = SHA2('demo-token-1',256);
+SET @proof_id = (SELECT proof_id FROM DISCLOSURE_PROOF WHERE share_token=@proof_token);
+SET @selected_grade_id = 11;
 SET @university_id = 1;
 SET @term = 'Fall 2025';
+SET @root_prefix = '';
 
 -- Q1. Screen 13: look up a proof and explain its database status.
 -- A missing proof returns no rows. No grades are exposed for invalid proofs.
@@ -33,7 +36,7 @@ FROM DISCLOSURE_PROOF dp
 JOIN STUDENT s ON s.student_id = dp.student_id
 JOIN DISCLOSED_GRADE dg ON dg.proof_id = dp.proof_id
 JOIN GRADE g ON g.grade_id = dg.grade_id
-JOIN COURSE c ON c.course_id = g.course_id
+JOIN COURSE_CONTEXT c ON c.course_id = g.course_id
 JOIN MERKLE_CHECKPOINT mc ON mc.checkpoint_id = g.checkpoint_id
 JOIN UNIVERSITY u ON u.university_id = mc.university_id
 WHERE dp.proof_id = @proof_id AND is_proof_valid(dp.proof_id) = 1
@@ -45,7 +48,8 @@ SELECT u.name AS university_name, u.public_key,
        mc.leaf_count, mc.signature, mc.published_at
 FROM MERKLE_CHECKPOINT mc
 JOIN UNIVERSITY u ON u.university_id = mc.university_id
-WHERE mc.university_id = @university_id AND mc.term = @term
+WHERE mc.university_id = @university_id AND (@term IS NULL OR mc.term = @term)
+  AND mc.root_hash LIKE CONCAT(@root_prefix,'%')
 ORDER BY mc.version_no DESC;
 
 -- Q4. Backend only: ordered leaf hashes to reconstruct the requested tree.
@@ -53,7 +57,8 @@ ORDER BY mc.version_no DESC;
 SELECT g.leaf_index, g.leaf_hash
 FROM GRADE g
 WHERE g.checkpoint_id = (
-    SELECT checkpoint_id FROM GRADE WHERE grade_id = 11
+    SELECT g.checkpoint_id FROM GRADE g JOIN DISCLOSED_GRADE dg ON dg.grade_id=g.grade_id
+    WHERE g.grade_id=@selected_grade_id AND dg.proof_id=@proof_id AND is_proof_valid(@proof_id)=1
 )
 ORDER BY g.leaf_index;
 
@@ -77,8 +82,8 @@ SET @new_proof_id = 800001;
 SET @selected_grade_id = 11;
 START TRANSACTION;
 INSERT INTO DISCLOSURE_PROOF
-    (proof_id, student_id, verifier_id, status, created_at, expires_at)
-VALUES (@new_proof_id, @student_id, 1, 'active', NOW(), NOW() + INTERVAL 30 DAY);
+    (proof_id, student_id, verifier_id, status, created_at, expires_at,share_token)
+VALUES (@new_proof_id, @student_id, 1, 'active', NOW(), NOW() + INTERVAL 30 DAY,HEX(RANDOM_BYTES(32)));
 
 INSERT INTO DISCLOSED_GRADE (proof_id, grade_id)
 SELECT @new_proof_id, g.grade_id

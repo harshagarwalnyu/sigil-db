@@ -29,3 +29,7 @@ jobs:
         env:
           MYSQL_PWD: sigil-ci
         run: python scripts/validate.py --container sigil-mysql --rebuild
+      - name: Import standalone submission SQL
+        env:
+          MYSQL_PWD: sigil-ci
+        run: docker exec -i -e MYSQL_PWD sigil-mysql mysql --user=root --batch < COMMANDS.sql > /tmp/sigil-bundle-import.log

@@ -1,0 +1,8 @@
+DESCRIBE ENROLLMENT;
++-------------+----------+------+-----+---------+-------+
+| Field       | Type     | Null | Key | Default | Extra |
++-------------+----------+------+-----+---------+-------+
+| student_id  | int      | NO   | PRI | NULL    |       |
+| course_id   | int      | NO   | PRI | NULL    |       |
+| enrolled_at | datetime | NO   |     | NULL    |       |
++-------------+----------+------+-----+---------+-------+

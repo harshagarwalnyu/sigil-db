@@ -1,0 +1,17 @@
++--------------------+-----------+
+| table_name         | row_count |
++--------------------+-----------+
+| CORRECTION_REQUEST |        10 |
+| COURSE             |        22 |
+| DISCLOSED_GRADE    |        12 |
+| DISCLOSURE_PROOF   |        11 |
+| ENROLLMENT         |        22 |
+| GRADE              |        14 |
+| GRADE_DRAFT        |        10 |
+| INSTRUCTOR         |        10 |
+| MERKLE_CHECKPOINT  |        11 |
+| STUDENT            |        10 |
+| STUDENT_PHONE      |        12 |
+| UNIVERSITY         |        10 |
+| VERIFIER           |        10 |
++--------------------+-----------+

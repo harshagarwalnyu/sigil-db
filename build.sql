@@ -10,11 +10,15 @@ USE sigil;
 SOURCE sql/01_create/1_khalid.sql;
 SOURCE sql/01_create/2_mohammad.sql;
 SOURCE sql/01_create/3_pratyush.sql;
+SOURCE sql/01_create/4_ui_support.sql;
+SOURCE sql/01_create/5_views.sql;
 
 -- 2. Advanced commands (before data, so triggers/checks validate the seed rows)
 SOURCE sql/02_advanced/harsh.sql;
+SOURCE sql/02_advanced/ui_workflows.sql;
 
 -- 3. Seed data
 SOURCE sql/03_seed/1_khalid.sql;
 SOURCE sql/03_seed/2_mohammad.sql;
 SOURCE sql/03_seed/3_pratyush.sql;
+SOURCE sql/03_seed/4_ui_support.sql;

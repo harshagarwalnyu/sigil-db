@@ -28,13 +28,15 @@ def main():
     db.create_function("CONCAT", -1, concat)
     db.create_function("CONCAT_WS", -1, lambda sep, *values: sep.join(str(v) for v in values if v is not None))
     db.create_function("UNHEX", 1, bytes.fromhex)
+    db.create_function("LPAD", 3, lambda value, size, pad: str(value).rjust(size,pad))
     tables = []
     for path in sorted((ROOT / "sql/01_create").glob("*.sql")):
         for table, body in re.findall(r"CREATE\s+TABLE\s+(\w+)\s*\((.*?)\n\);", path.read_text(), re.I | re.S):
             columns = re.findall(r"^\s+(\w+)\s+(?:INT|VARCHAR|CHAR|DATE|DATETIME|TEXT)\b", body, re.M | re.I)
             db.execute(f"CREATE TABLE {table} ({', '.join(columns)})")
             tables.append(table)
-    assert len(tables) == 10, f"Expected 10 tables, found {tables}"
+    assert len(tables) == 13, f"Expected 13 tables, found {tables}"
+    db.executescript((ROOT / 'sql/01_create/5_views.sql').read_text())
     for path in sorted((ROOT / "sql/03_seed").glob("*.sql")):
         db.executescript(path.read_text())
     for table in tables:

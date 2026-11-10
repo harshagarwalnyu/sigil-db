@@ -1,0 +1,11 @@
+DESCRIBE INSTRUCTOR;
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| instructor_id | int          | NO   | PRI | NULL    | auto_increment |
+| university_id | int          | NO   | MUL | NULL    |                |
+| first_name    | varchar(100) | YES  |     | NULL    |                |
+| last_name     | varchar(100) | YES  |     | NULL    |                |
+| email         | varchar(255) | YES  | UNI | NULL    |                |
+| department    | varchar(255) | YES  |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+

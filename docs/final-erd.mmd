@@ -1,0 +1,123 @@
+erDiagram
+    UNIVERSITY ||--o{ INSTRUCTOR : employs
+    UNIVERSITY ||--o{ STUDENT : admits
+    UNIVERSITY ||--o{ MERKLE_CHECKPOINT : publishes
+    INSTRUCTOR ||--o{ COURSE : teaches
+    STUDENT ||--o{ STUDENT_PHONE : has
+    STUDENT ||--o{ ENROLLMENT : joins
+    COURSE ||--o{ ENROLLMENT : includes
+    ENROLLMENT ||--o| GRADE_DRAFT : saves
+    STUDENT ||--o{ GRADE : receives
+    COURSE ||--o{ GRADE : awards
+    GRADE |o--o| GRADE : supersedes
+    MERKLE_CHECKPOINT |o--|{ GRADE : seals
+    STUDENT ||--o{ DISCLOSURE_PROOF : creates
+    VERIFIER ||--o{ DISCLOSURE_PROOF : receives
+    DISCLOSURE_PROOF ||--|{ DISCLOSED_GRADE : reveals
+    GRADE ||--o{ DISCLOSED_GRADE : disclosed_as
+    GRADE ||--o{ CORRECTION_REQUEST : reviewed_in
+    INSTRUCTOR ||--o{ CORRECTION_REQUEST : requests
+    GRADE |o--o| CORRECTION_REQUEST : produced_by
+    CORRECTION_REQUEST {
+        int request_id PK
+        int grade_id FK
+        int instructor_id FK
+        varchar proposed_letter_grade
+        varchar change_reason
+        varchar evidence_uri
+        varchar status
+        datetime requested_at
+        datetime reviewed_at
+        varchar reviewer_comment
+        int approved_grade_id FK, UK
+    }
+    COURSE {
+        int course_id PK
+        int instructor_id FK
+        varchar course_code
+        varchar title
+        int credit_hours
+        varchar term
+        varchar section
+        datetime submission_deadline
+    }
+    DISCLOSED_GRADE {
+        int proof_id PK, FK
+        int grade_id PK, FK
+    }
+    DISCLOSURE_PROOF {
+        int proof_id PK
+        int student_id FK
+        int verifier_id FK
+        varchar status
+        datetime created_at
+        datetime expires_at
+        char share_token UK
+        datetime revoked_at
+    }
+    ENROLLMENT {
+        int student_id PK, FK
+        int course_id PK, FK
+        datetime enrolled_at
+    }
+    GRADE {
+        int grade_id PK
+        int student_id FK
+        int course_id FK
+        int checkpoint_id FK
+        int supersedes_grade_id FK, UK
+        varchar letter_grade
+        char salt
+        char leaf_hash UK
+        int leaf_index
+        varchar change_reason
+        datetime recorded_at
+    }
+    GRADE_DRAFT {
+        int student_id PK, FK
+        int course_id PK, FK
+        varchar letter_grade
+        datetime saved_at
+    }
+    INSTRUCTOR {
+        int instructor_id PK
+        int university_id FK
+        varchar first_name
+        varchar last_name
+        varchar email UK
+        varchar department
+    }
+    MERKLE_CHECKPOINT {
+        int checkpoint_id PK
+        int university_id FK
+        varchar term
+        int version_no
+        char root_hash
+        int leaf_count
+        text signature
+        datetime published_at
+    }
+    STUDENT {
+        int student_id PK
+        int university_id FK
+        varchar first_name
+        varchar last_name
+        varchar email UK
+        date date_of_birth
+        varchar netid UK
+        char student_number UK
+    }
+    STUDENT_PHONE {
+        int student_id PK, FK
+        varchar phone_number PK
+    }
+    UNIVERSITY {
+        int university_id PK
+        varchar name UK
+        varchar public_key
+    }
+    VERIFIER {
+        int verifier_id PK
+        varchar organization_name
+        varchar contact_email UK
+    }

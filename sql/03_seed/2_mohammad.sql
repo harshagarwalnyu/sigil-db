@@ -1,6 +1,6 @@
 -- INSERT seed data (10+ rows per table): mohammad
 -- Do NOT run until every table is created.
-INSERT INTO STUDENT VALUES
+INSERT INTO STUDENT (student_id, university_id, first_name, last_name, email, date_of_birth) VALUES
 (1,  1,  'Omar',    'Haddad',   'omar.haddad@mit.edu',        '2004-03-12'),
 (2,  2,  'Aisha',   'Rahman',   'aisha.rahman@stanford.edu',  '2003-07-25'),
 (3,  3,  'Daniel',  'Kim',      'daniel.kim@harvard.edu',     '2004-11-02'),
@@ -24,7 +24,7 @@ INSERT INTO VERIFIER VALUES
 (9,  'IBM',                 'hr@ibm.com'),
 (10, 'NYU Graduate School', 'admissions@nyu.edu');
 
-INSERT INTO DISCLOSURE_PROOF VALUES
+INSERT INTO DISCLOSURE_PROOF (proof_id, student_id, verifier_id, status, created_at, expires_at) VALUES
 (1,  1,  1,  'active',  '2026-09-01 10:00:00', '2026-12-01 10:00:00'),
 (2,  2,  3,  'active',  '2026-09-05 14:30:00', '2026-12-05 14:30:00'),
 (3,  3,  2,  'revoked', '2026-09-10 09:15:00', '2026-12-10 09:15:00'),

@@ -1,0 +1,15 @@
+SELECT * FROM INSTRUCTOR;
++---------------+---------------+------------+-----------+-----------------------------+----------------------+
+| instructor_id | university_id | first_name | last_name | email                       | department           |
++---------------+---------------+------------+-----------+-----------------------------+----------------------+
+|             1 |             1 | John       | Smith     | john.smith@mit.edu          | Computer Science     |
+|             2 |             2 | Sarah      | Johnson   | sarah.johnson@stanford.edu  | Mathematics          |
+|             3 |             3 | Michael    | Brown     | michael.brown@harvard.edu   | Economics            |
+|             4 |             4 | Emily      | Davis     | emily.davis@berkeley.edu    | Physics              |
+|             5 |             5 | David      | Wilson    | david.wilson@princeton.edu  | Chemistry            |
+|             6 |             6 | Jessica    | Miller    | jessica.miller@columbia.edu | Biology              |
+|             7 |             7 | Robert     | Taylor    | robert.taylor@uchicago.edu  | Statistics           |
+|             8 |             8 | Laura      | Anderson  | laura.anderson@yale.edu     | History              |
+|             9 |             9 | James      | Thomas    | james.thomas@cornell.edu    | Engineering          |
+|            10 |            10 | Linda      | Moore     | linda.moore@cmu.edu         | Software Engineering |
++---------------+---------------+------------+-----------+-----------------------------+----------------------+

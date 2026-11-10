@@ -1,0 +1,16 @@
+DESCRIBE CORRECTION_REQUEST;
++-----------------------+--------------+------+-----+---------+----------------+
+| Field                 | Type         | Null | Key | Default | Extra          |
++-----------------------+--------------+------+-----+---------+----------------+
+| request_id            | int          | NO   | PRI | NULL    | auto_increment |
+| grade_id              | int          | NO   | MUL | NULL    |                |
+| instructor_id         | int          | NO   | MUL | NULL    |                |
+| proposed_letter_grade | varchar(2)   | NO   |     | NULL    |                |
+| change_reason         | varchar(500) | NO   |     | NULL    |                |
+| evidence_uri          | varchar(500) | YES  |     | NULL    |                |
+| status                | varchar(10)  | NO   |     | pending |                |
+| requested_at          | datetime     | NO   |     | NULL    |                |
+| reviewed_at           | datetime     | YES  |     | NULL    |                |
+| reviewer_comment      | varchar(500) | YES  |     | NULL    |                |
+| approved_grade_id     | int          | YES  | UNI | NULL    |                |
++-----------------------+--------------+------+-----+---------+----------------+

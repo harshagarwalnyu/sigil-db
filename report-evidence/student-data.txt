@@ -1,0 +1,15 @@
+SELECT * FROM STUDENT;
++------------+---------------+------------+-----------+------------------------------+---------------+--------+----------------+
+| student_id | university_id | first_name | last_name | email                        | date_of_birth | netid  | student_number |
++------------+---------------+------------+-----------+------------------------------+---------------+--------+----------------+
+|          1 |             1 | Omar       | Haddad    | omar.haddad@mit.edu          | 2004-03-12    | oh0001 | N00000001      |
+|          2 |             2 | Aisha      | Rahman    | aisha.rahman@stanford.edu    | 2003-07-25    | ar0002 | N00000002      |
+|          3 |             3 | Daniel     | Kim       | daniel.kim@harvard.edu       | 2004-11-02    | dk0003 | N00000003      |
+|          4 |             4 | Sofia      | Martinez  | sofia.martinez@berkeley.edu  | 2005-01-18    | sm0004 | N00000004      |
+|          5 |             5 | Ethan      | Clark     | ethan.clark@princeton.edu    | 2003-09-30    | ec0005 | N00000005      |
+|          6 |             6 | Noura      | Alqahtani | noura.alqahtani@columbia.edu | 2004-05-14    | na0006 | N00000006      |
+|          7 |             7 | Lucas      | Nguyen    | lucas.nguyen@uchicago.edu    | 2004-08-09    | ln0007 | N00000007      |
+|          8 |             8 | Hannah     | Lee       | hannah.lee@yale.edu          | 2005-02-27    | hl0008 | N00000008      |
+|          9 |             9 | Yusuf      | Demir     | yusuf.demir@cornell.edu      | 2003-12-05    | yd0009 | N00000009      |
+|         10 |            10 | Grace      | Patel     | grace.patel@cmu.edu          | 2004-06-21    | gp0010 | N00000010      |
++------------+---------------+------------+-----------+------------------------------+---------------+--------+----------------+

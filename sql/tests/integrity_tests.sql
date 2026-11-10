@@ -65,10 +65,10 @@ CALL test_reject('INSERT INTO GRADE (student_id,course_id,letter_grade,salt,leaf
 CALL test_reject('INSERT INTO GRADE (student_id,course_id,letter_grade,salt,leaf_hash) VALUES (1,2,''A'',''test'',''test-cross-university'')');
 CALL test_reject('INSERT INTO GRADE (student_id,course_id,supersedes_grade_id,letter_grade,salt,leaf_hash,change_reason) VALUES (3,3,12,''A'',''test'',''test-blank-reason'',''  '')');
 CALL test_reject('INSERT INTO MERKLE_CHECKPOINT VALUES (800004,3,''Fall 2025'',2,REPEAT(''a'',64),1,''test-only'',NOW())');
-CALL test_reject('INSERT INTO COURSE VALUES (800001,1,1,''TEST'',''Test'',0,''Fall 2025'')');
-CALL test_reject('INSERT INTO COURSE VALUES (800001,1,NULL,''TEST'',''Test'',3,''Fall 2025'')');
-CALL test_reject('INSERT INTO COURSE VALUES (800001,1,2,''TEST'',''Test'',3,''Fall 2025'')');
-CALL test_reject('INSERT INTO DISCLOSURE_PROOF VALUES (800001,3,1,''active'',NOW(),NOW()-INTERVAL 1 DAY)');
+CALL test_reject('INSERT INTO COURSE (course_id,instructor_id,course_code,title,credit_hours,term) VALUES (800001,1,''TEST'',''Test'',0,''Fall 2025'')');
+CALL test_reject('INSERT INTO COURSE (course_id,instructor_id,course_code,title,credit_hours,term) VALUES (800001,NULL,''TEST'',''Test'',3,''Fall 2025'')');
+CALL test_reject('INSERT INTO COURSE (course_id,instructor_id,course_code,title,credit_hours,term) VALUES (800001,999999,''TEST'',''Test'',3,''Fall 2025'')');
+CALL test_reject('INSERT INTO DISCLOSURE_PROOF (proof_id,student_id,verifier_id,status,created_at,expires_at) VALUES (800001,3,1,''active'',NOW(),NOW()-INTERVAL 1 DAY)');
 
 -- A correct, one-time publication update succeeds.
 UPDATE GRADE SET checkpoint_id=800001, leaf_index=0 WHERE grade_id=12;
@@ -78,7 +78,7 @@ CALL test_reject('UPDATE GRADE SET checkpoint_id=800001, leaf_index=1 WHERE grad
 CALL test_reject('INSERT INTO GRADE (student_id,course_id,checkpoint_id,supersedes_grade_id,letter_grade,salt,leaf_hash,leaf_index,change_reason) VALUES (3,3,800001,12,''A'',''test'',''test-duplicate-index'',0,''test correction'')');
 
 -- Time-relative proof fixtures stay meaningful after the seed proofs expire.
-INSERT INTO DISCLOSURE_PROOF VALUES
+INSERT INTO DISCLOSURE_PROOF (proof_id,student_id,verifier_id,status,created_at,expires_at) VALUES
     (800001,3,1,'active',NOW(),NOW()+INTERVAL 1 DAY),
     (800002,3,1,'active',NOW()-INTERVAL 2 DAY,NOW()-INTERVAL 1 DAY),
     (800003,3,1,'revoked',NOW(),NOW()+INTERVAL 1 DAY);

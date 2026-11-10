@@ -1,0 +1,7 @@
+DESCRIBE DISCLOSED_GRADE;
++----------+------+------+-----+---------+-------+
+| Field    | Type | Null | Key | Default | Extra |
++----------+------+------+-----+---------+-------+
+| proof_id | int  | NO   | PRI | NULL    |       |
+| grade_id | int  | NO   | PRI | NULL    |       |
++----------+------+------+-----+---------+-------+

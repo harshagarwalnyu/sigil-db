@@ -1,0 +1,15 @@
+SELECT * FROM UNIVERSITY;
++---------------+---------------------------------------+------------+
+| university_id | name                                  | public_key |
++---------------+---------------------------------------+------------+
+|             1 | Massachusetts Institute of Technology | key1       |
+|             2 | Stanford University                   | key2       |
+|             3 | Harvard University                    | key3       |
+|             4 | University of California, Berkeley    | key4       |
+|             5 | Princeton University                  | key5       |
+|             6 | Columbia University                   | key6       |
+|             7 | University of Chicago                 | key7       |
+|             8 | Yale University                       | key8       |
+|             9 | Cornell University                    | key9       |
+|            10 | Carnegie Mellon University            | key10      |
++---------------+---------------------------------------+------------+

@@ -1,0 +1,2 @@
+COMMANDS.sql standalone import
+Exit status: 0

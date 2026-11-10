@@ -30,7 +30,7 @@ BEGIN
     DECLARE old_course  INT DEFAULT NULL;
 
     IF NOT EXISTS (
-        SELECT 1 FROM STUDENT s JOIN COURSE c
+        SELECT 1 FROM STUDENT s JOIN COURSE_CONTEXT c
           ON c.university_id = s.university_id
         WHERE s.student_id = NEW.student_id AND c.course_id = NEW.course_id
     ) THEN
@@ -39,7 +39,7 @@ BEGIN
     END IF;
 
     IF NEW.checkpoint_id IS NOT NULL AND NOT EXISTS (
-        SELECT 1 FROM MERKLE_CHECKPOINT mc JOIN COURSE c
+        SELECT 1 FROM MERKLE_CHECKPOINT mc JOIN COURSE_CONTEXT c
           ON c.university_id = mc.university_id AND c.term = mc.term
         WHERE mc.checkpoint_id = NEW.checkpoint_id AND c.course_id = NEW.course_id
           AND NEW.leaf_index IS NOT NULL
@@ -108,7 +108,7 @@ BEGIN
             SET MESSAGE_TEXT = 'Grades are append-only: insert a correction instead of updating';
     END IF;
     IF NOT EXISTS (
-        SELECT 1 FROM MERKLE_CHECKPOINT mc JOIN COURSE c
+        SELECT 1 FROM MERKLE_CHECKPOINT mc JOIN COURSE_CONTEXT c
           ON c.university_id = mc.university_id AND c.term = mc.term
         WHERE mc.checkpoint_id = NEW.checkpoint_id AND c.course_id = NEW.course_id
           AND NEW.leaf_index < mc.leaf_count
@@ -200,7 +200,7 @@ BEGIN
     START TRANSACTION;
 
     SELECT COUNT(*) INTO v_count
-    FROM GRADE g JOIN COURSE c ON c.course_id = g.course_id
+    FROM GRADE g JOIN COURSE_CONTEXT c ON c.course_id = g.course_id
     WHERE g.checkpoint_id IS NULL
       AND c.university_id = p_university_id
       AND c.term = p_term;
@@ -223,7 +223,7 @@ BEGIN
     seal_loop: LOOP
         SET v_grade = NULL;
         SELECT MIN(g.grade_id) INTO v_grade
-        FROM GRADE g JOIN COURSE c ON c.course_id = g.course_id
+        FROM GRADE g JOIN COURSE_CONTEXT c ON c.course_id = g.course_id
         WHERE g.checkpoint_id IS NULL
           AND c.university_id = p_university_id
           AND c.term = p_term;
