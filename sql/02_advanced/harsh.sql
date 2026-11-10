@@ -29,6 +29,26 @@ BEGIN
     DECLARE old_student INT DEFAULT NULL;
     DECLARE old_course  INT DEFAULT NULL;
 
+    IF NOT EXISTS (
+        SELECT 1 FROM STUDENT s JOIN COURSE c
+          ON c.university_id = s.university_id
+        WHERE s.student_id = NEW.student_id AND c.course_id = NEW.course_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Student and course must belong to the same university';
+    END IF;
+
+    IF NEW.checkpoint_id IS NOT NULL AND NOT EXISTS (
+        SELECT 1 FROM MERKLE_CHECKPOINT mc JOIN COURSE c
+          ON c.university_id = mc.university_id AND c.term = mc.term
+        WHERE mc.checkpoint_id = NEW.checkpoint_id AND c.course_id = NEW.course_id
+          AND NEW.leaf_index IS NOT NULL
+          AND NEW.leaf_index >= 0 AND NEW.leaf_index < mc.leaf_count
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Checkpoint must match the course university, term and leaf range';
+    END IF;
+
     IF NEW.supersedes_grade_id IS NULL THEN
         IF EXISTS (SELECT 1 FROM GRADE
                    WHERE student_id = NEW.student_id
@@ -72,6 +92,8 @@ BEGIN
     IF NOT (
             OLD.checkpoint_id IS NULL
         AND NEW.checkpoint_id IS NOT NULL
+        AND NEW.leaf_index IS NOT NULL
+        AND NEW.leaf_index >= 0
         AND NEW.grade_id            <=> OLD.grade_id
         AND NEW.student_id          <=> OLD.student_id
         AND NEW.course_id           <=> OLD.course_id
@@ -84,6 +106,15 @@ BEGIN
     ) THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Grades are append-only: insert a correction instead of updating';
+    END IF;
+    IF NOT EXISTS (
+        SELECT 1 FROM MERKLE_CHECKPOINT mc JOIN COURSE c
+          ON c.university_id = mc.university_id AND c.term = mc.term
+        WHERE mc.checkpoint_id = NEW.checkpoint_id AND c.course_id = NEW.course_id
+          AND NEW.leaf_index < mc.leaf_count
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Checkpoint must match the course university, term and leaf range';
     END IF;
 END$$
 
@@ -149,7 +180,7 @@ END$$
 -- ---------------------------------------------------------------------------
 CREATE PROCEDURE publish_checkpoint(
     IN p_university_id INT,
-    IN p_term          VARCHAR(20),
+    IN p_term          VARCHAR(50),
     IN p_root_hash     VARCHAR(255),
     IN p_signature     TEXT
 )

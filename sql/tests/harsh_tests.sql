@@ -53,7 +53,7 @@ CALL publish_checkpoint(9001, 'TEST-2026', 'roothash-v2', 'signature-v2');
 INSERT INTO DISCLOSURE_PROOF (proof_id, student_id, verifier_id, status, created_at, expires_at)
 VALUES (9001, 9001, 9001, 'active', NOW(), NOW() + INTERVAL 30 DAY),
        (9002, 9001, 9001, 'revoked', NOW(), NOW() + INTERVAL 30 DAY),
-       (9003, 9001, 9001, 'active', NOW(), NOW() - INTERVAL 1 DAY),
+       (9003, 9001, 9001, 'active', NOW() - INTERVAL 2 DAY, NOW() - INTERVAL 1 DAY),
        (9004, 9001, 9001, 'active', NOW(), NOW() + INTERVAL 30 DAY);
 INSERT INTO DISCLOSED_GRADE (proof_id, grade_id) VALUES (9001, 9001), (9002, 9001), (9003, 9001);
 -- 9004 reveals no grades

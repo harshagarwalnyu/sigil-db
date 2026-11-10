@@ -38,3 +38,40 @@ Use these exact names in CREATE TABLE and in every FOREIGN KEY ... REFERENCES.
 - No `ON DELETE CASCADE` on foreign keys pointing into GRADE (cascades skip triggers)
 - Test them: `mysql -u <user> -p --force sigil < sql/tests/harsh_tests.sql`, then rerun build.sql
 
+## Current implementation and validation
+
+The implementation targets **MySQL 8.4 LTS**. Milestone 2's PostgreSQL selection
+is historical; this milestone uses MySQL syntax and tooling.
+
+Harsh's application queries are in `sql/04_queries/harsh.sql`: proof lookup,
+disclosed grade evidence, the public checkpoint registry, backend tree leaves,
+and mobile proof creation/selection/revocation. The write examples roll back.
+The other three query files remain assigned to their respective owners.
+
+On Windows, run `./scripts/install-windows.ps1` from your own PowerShell to install
+MySQL and DataGrip with WinGet. Then use **MySQL Configurator** to initialize the
+server and set your own root password. In DataGrip, add a MySQL data source at
+`localhost:3306`, download its JDBC driver if prompted, and test the connection.
+For local development, if function creation reports error 1418, an administrator
+can enable `SET GLOBAL log_bin_trust_function_creators = 1;` on that local server.
+
+Run the fail-fast build and regression checks on a disposable `sigil` database:
+
+```powershell
+python scripts/validate.py --mysql "C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe" --ask-password --rebuild
+```
+
+`--rebuild` drops and recreates `sigil`, then restores the seed data after a
+successful test run. Without it, validation requires a fresh existing seed
+database and leaves the publication test committed; rebuild before repeating.
+No third-party Python packages are needed. The runner expands
+`SOURCE` statements and stops on any unexpected SQL error. GitHub Actions runs
+the same checks against a fresh MySQL 8.4 container.
+
+`python scripts/check_seed.py` checks the actual seed INSERTs, leaf hashes,
+Merkle roots, counts and indexes without MySQL. This does not validate MySQL
+constraints or stored routines.
+
+See [implementation notes](docs/implementation-notes.md) for the publication
+exception to append-only grades, fixture cryptography, and verification limits.
+

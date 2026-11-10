@@ -38,8 +38,19 @@ INSERT INTO COURSE VALUES
 
 INSERT INTO MERKLE_CHECKPOINT
 SELECT course_id, university_id, term, 1,
-       SHA2(CONCAT_WS('|', course_id, university_id, instructor_id, course_code, title, credit_hours, term), 256),
-       1,
-       CONCAT('sig', course_id),
+       CASE WHEN course_id = 1 THEN
+           SHA2(CONCAT(
+               UNHEX(SHA2(CONCAT_WS('|', 1, 1, 1, 'B+', 'salt1'), 256)),
+               UNHEX(SHA2(CONCAT_WS('|', 11, 1, 1, 'A', 'salt11'), 256))
+           ), 256)
+       ELSE SHA2(CONCAT_WS('|', course_id, course_id, course_id,
+                    CASE course_id
+                        WHEN 2 THEN 'A' WHEN 3 THEN 'B' WHEN 4 THEN 'A-'
+                        WHEN 5 THEN 'B+' WHEN 6 THEN 'A' WHEN 7 THEN 'B'
+                        WHEN 8 THEN 'A-' WHEN 9 THEN 'B+' WHEN 10 THEN 'A'
+                    END, CONCAT('salt', course_id)), 256)
+       END,
+       CASE WHEN course_id = 1 THEN 2 ELSE 1 END,
+       CONCAT('DEMO-ONLY-signature-', course_id),
        '2026-01-01 00:00:00'
 FROM COURSE;

@@ -24,6 +24,7 @@ create TABLE DISCLOSURE_PROOF (
     status       VARCHAR(10)  NOT NULL CHECK (status IN ('active', 'revoked')),
     created_at      DATETIME    NOT NULL,
     expires_at      DATETIME    NOT NULL,
+    CHECK (expires_at > created_at),
     PRIMARY KEY(proof_id),
     FOREIGN KEY(student_id) REFERENCES STUDENT(student_id),
     FOREIGN KEY(verifier_id) REFERENCES VERIFIER(verifier_id)   

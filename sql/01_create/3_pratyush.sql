@@ -16,12 +16,16 @@ CREATE TABLE GRADE (
     PRIMARY KEY (grade_id),
     UNIQUE (supersedes_grade_id),
     UNIQUE (leaf_hash),
+    UNIQUE (checkpoint_id, leaf_index),
     FOREIGN KEY (student_id) REFERENCES STUDENT(student_id),
     FOREIGN KEY (course_id) REFERENCES COURSE(course_id),
     FOREIGN KEY (checkpoint_id) REFERENCES MERKLE_CHECKPOINT(checkpoint_id),
     FOREIGN KEY (supersedes_grade_id) REFERENCES GRADE(grade_id),
     CHECK (letter_grade IN ('A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'F')),
-    CHECK (supersedes_grade_id IS NULL OR change_reason IS NOT NULL)
+    CHECK (supersedes_grade_id IS NULL OR
+           (change_reason IS NOT NULL AND CHAR_LENGTH(TRIM(change_reason)) > 0)),
+    CHECK ((checkpoint_id IS NULL AND leaf_index IS NULL) OR
+           (checkpoint_id IS NOT NULL AND leaf_index IS NOT NULL AND leaf_index >= 0))
 );
 
 -- 3. Disclosed_Grade Table

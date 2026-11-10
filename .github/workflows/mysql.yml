@@ -1,0 +1,31 @@
+name: MySQL validation
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Start disposable MySQL 8.4
+        run: docker run -d --name sigil-mysql -e MYSQL_ROOT_PASSWORD=sigil-ci mysql:8.4 --log-bin-trust-function-creators=1
+      - name: Check seed hashes independently
+        run: python scripts/check_seed.py
+      - name: Wait for MySQL
+        run: |
+          for attempt in $(seq 1 60); do
+            if docker exec -e MYSQL_PWD=sigil-ci sigil-mysql mysql -uroot -e 'SELECT 1' >/dev/null 2>&1; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs sigil-mysql
+          exit 1
+      - name: Build and test
+        env:
+          MYSQL_PWD: sigil-ci
+        run: python scripts/validate.py --container sigil-mysql --rebuild
